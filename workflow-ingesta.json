@@ -1,0 +1,143 @@
+{
+  "name": "vialight- ingesta",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "ddaabedc-1b90-4e17-b92c-44553807c9e6",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "tableName": {
+          "__rl": true,
+          "value": "documents",
+          "mode": "list",
+          "cachedResultName": "documents"
+        },
+        "options": {
+          "queryName": "match_documents"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+      "typeVersion": 1.4,
+      "position": [
+        448,
+        0
+      ],
+      "id": "9f5a4ca4-5b89-43e5-8434-f1c8408f120c",
+      "name": "Supabase Vector Store"
+    },
+    {
+      "parameters": {},
+      "type": "@n8n/n8n-nodes-langchain.embeddingsGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        272,
+        208
+      ],
+      "id": "23e12ceb-9f06-4ae8-b3c3-26240e72af02",
+      "name": "Embeddings Google Gemini"
+    },
+    {
+      "parameters": {
+        "jsonMode": "expressionData",
+        "jsonData": "={{ $json.texto }}",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1.1,
+      "position": [
+        656,
+        192
+      ],
+      "id": "08c9a72c-ec98-4cb5-a2fb-5212a746e5b7",
+      "name": "Default Data Loader"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c4b2dccc-eaf2-45c8-823b-f4ee7220f395",
+              "name": "texto",
+              "value": "VIALIGHT - INFORMACIÓN PARA CLIENTES  QUIÉNES SOMOS Vialight es una empresa de gastronomía saludable de Pinamar, fundada en 2008. Fue pionera en alimentos saludables en la zona. Está coordinada por la Lic. en Nutrición María Belén Beltrachini. Lema: \"Somos la porción justa, somos Vialight\". Cocinamos sin frituras: horno, vapor, salteado, guisado, estofado, hervido, plancha y baño maría.  LÍNEAS DE VIANDAS Keto Proteicas, Desinflamatorias Detox, Fitness, Vegetariano/Vegano y Equilibradas. También hay menú a la carta: pollo, cerdo, pescado, carnes rojas, opciones veggie, pastas, tarteletas, rolls, pizzas individuales, chop-suey, ensaladas, sándwiches y sopas.  MODALIDADES DE CONTRATACIÓN 1) Planes de Viandas: menú semanal armado por la nutricionista. 2) Pedido a la Carta: el cliente elige los platos y las cantidades.  PACKS DE VIANDAS Y PRECIOS Hay más de 30 opciones de platos. Llevando 5 viandas congeladas o más hay descuento desde el 20%. Promo semanal: packs x5, x6 y x7 a $10.500 cada vianda; packs x10, x12 y x14 a $10.200 cada vianda. Las viandas se entregan con cápsula de refrigeración. Se pueden recibir en casa u oficina, o retirar en el local.  ENVÍOS Delivery refrigerado sin cargo en Pinamar, Villa Gesell y Madariaga, en vehículos refrigerados aprobados por SENASA. - Lunes, miércoles y viernes: Pinamar, Cariló, Valeria del Mar, Ostende y General Madariaga. - Martes, jueves y sábados: Villa Gesell, Mar Azul, Las Gaviotas, Mar de las Pampas y Colonia Marina.  LOCAL Y CARTA Local en Constitución 1472, Pinamar. Cafetería y take away, desayunos y meriendas, tostados, sándwiches de pan integral, bowls saludables, huevos revueltos, ensaladas, rolls, tartas del día, sopas, woks (pollo, carne, langostinos), sushi lunch, jugos naturales, kombucha, licuados y limonadas.  CONTACTO WhatsApp Pinamar: 2254 416007. WhatsApp Villa Gesell: 2255 412375. Teléfono local: (02254) 513080. Email: info@vialight.com.ar. Web: www.vialight.com.ar. Instagram: @vialight_viandas.",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        224,
+        0
+      ],
+      "id": "272611fb-9274-454e-aabf-aa9478b39f2d",
+      "name": "Edit Fields"
+    }
+  ],
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Google Gemini": {
+      "ai_embedding": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Supabase Vector Store",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "staticData": null,
+  "pinData": {},
+  "triggerCount": 0,
+  "meta": {
+    "templateCredsSetupCompleted": true
+  }
+}
